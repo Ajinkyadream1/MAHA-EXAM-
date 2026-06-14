@@ -26,7 +26,7 @@ if 'exams' not in st.session_state:
         {
             "id": 2, "title_en": "IBPS PO (Probationary Officers) CRP XVI", "title_mr": "आयबीपीएस पीओ बँक भरती परीक्षा २०२६",
             "dept": "IBPS", "start": "2026-07-15", "last": "2026-08-10", "exam": "2026-08-22",
-            "link": "https://www.ibps.in", "status": "Upcoming",
+            "link": "https://ibps.in", "status": "Upcoming",
             "desc_en": "National bank recruitment drive for Probationary Officers.", "desc_mr": "राष्ट्रीयीकृत बँकांमध्ये प्रोबेशनरी ऑफिसर पदांसाठी भरती."
         },
         {
@@ -36,9 +36,9 @@ if 'exams' not in st.session_state:
             "desc_en": "Revised Computer Based Testing timelines for Undergraduate positions.", "desc_mr": "अंडरग्रेजुएट रेल्वे पदांसाठी सुधारित संगणक आधारित परीक्षा वेळापत्रक."
         },
         {
-            "id": 4, "title_en": "Maharashtra Police Constable Recruitment", "title_mr": "महाराष्ट्र पोलीस शिपाई भरती प्रक्रिया",
+            "id": 4, "title_en": "Maharashtra Police Constable Recruitment", "title_mr": "महारष्ट्र पोलीस शिपाई भरती प्रक्रिया",
             "dept": "Maharashtra Police", "start": "2026-01-05", "last": "2026-02-15", "exam": "2026-05-05",
-            "link": "https://www.mahapolice.gov.in", "status": "Closed",
+            "link": "https://mahapolice.gov.in", "status": "Closed",
             "desc_en": "State-wide mega recruitment drive for Police Constables and SRPF forces.", "desc_mr": "पोलीस शिपाई आणि एसआरपीएफ दलांसाठी राज्यव्यापी मेगा भरती प्रक्रिया."
         }
     ]
@@ -107,7 +107,7 @@ with tab_student:
             st.markdown("<div style='margin-bottom:20px;'></div>", unsafe_allow_html=True)
 
 # =========================================================
-#                    ADMIN CONTROL TAB
+#                    ADMIN CONTROL TAB (FIXED MIGRATION)
 # =========================================================
 with tab_admin:
     st.subheader("Manage Database Manually")
@@ -141,6 +141,7 @@ with tab_admin:
                         "link": new_link, "status": new_status, "desc_en": new_desc_en, "desc_mr": new_desc_mr
                     })
                     st.success("Successfully added! Switch to the Student View tab to verify.")
+                    st.rerun()
                 else:
                     st.error("Please complete the Exam Name fields before saving.")
 
@@ -153,6 +154,5 @@ with tab_admin:
             selected_exam_str = st.selectbox("Select Record to Update", list(exam_options.keys()))
             target_idx = exam_options[selected_exam_str]
             
-            # Form fields pre-filled with the current data values of the chosen record
+            # Form fields securely nested inside the password loop context block
             st.session_state['exams'][target_idx]["title_en"] = st.text_input("Edit Name (EN)", value=st.session_state['exams'][target_idx]["title_en"])
-            st.session_state['exams'][target_idx]["title_mr"] = st.text_input("Edit Name (MR)", value=st.session_state['exams'][target_idx]["title_mr"])
