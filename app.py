@@ -1,197 +1,116 @@
 import streamlit as st
 
-# 1. Page Configuration Setup (Government Blue & Gold Theme Layout)
+# 1. Page Configuration & Custom Web Typography Stylesheet Setup
 st.set_page_config(page_title="Maha Exam Tracker", page_icon="🏛️", layout="centered")
-
-# Importing Elegant Google Web Fonts (Cinzel for Headers, Montserrat for Cards)
 st.markdown("""
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Cinzel:wght@600;800&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-    /* App-wide Typography Framework overrides */
-    .stApp { 
-        background-color: #F8F9FA;
-        font-family: 'Montserrat', sans-serif !important;
-    }
-    
-    /* Elegant Government Style Header Typography */
-    .main-title { 
-        font-family: 'Cinzel', serif !important;
-        color: #002F6C; 
-        font-weight: 800; 
-        text-align: center; 
-        font-size: 28px; 
-        letter-spacing: 1px;
-        margin-bottom: 5px; 
-    }
-    .sub-title { 
-        font-family: 'Montserrat', sans-serif !important;
-        color: #D32F2F; 
-        text-align: center; 
-        font-size: 13px; 
-        font-weight: 700; 
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 25px; 
-    }
-    
-    /* Relocated Bottom Disclaimer Layout styling */
-    .disclaimer-box { 
-        background-color: #FFF9C4; 
-        padding: 15px; 
-        border-left: 5px solid #FBC02D; 
-        border-radius: 5px; 
-        margin-top: 40px; 
-        margin-bottom: 20px; 
-    }
-    
-    /* Clean Cards Visual Engine Layout */
-    .exam-card { 
-        background-color: white; 
-        padding: 18px; 
-        border-radius: 8px; 
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-        margin-bottom: 12px; 
-        border-top: 4px solid #002F6C; 
-    }
-    .status-badge { 
-        display: inline-block; 
-        padding: 4px 10px; 
-        border-radius: 4px; 
-        font-size: 11px; 
-        font-weight: 700; 
-        color: white; 
-        text-transform: uppercase;
-    }
+    .stApp { background-color: #F8F9FA; font-family: 'Montserrat', sans-serif !important; }
+    .main-title { font-family: 'Cinzel', serif !important; color: #002F6C; font-weight: 800; text-align: center; font-size: 26px; margin-bottom: 5px; }
+    .sub-title { color: #D32F2F; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; }
+    .disclaimer-box { background-color: #FFF9C4; padding: 12px; border-left: 5px solid #FBC02D; border-radius: 5px; margin-top: 30px; }
+    .exam-card { background-color: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 12px; border-top: 4px solid #002F6C; }
+    .status-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; color: white; }
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Setup Persistent In-Memory Database (No Google Sheets Needed)
+# 2. Setup Persistent In-Memory Database
 if 'exams' not in st.session_state:
     st.session_state['exams'] = [
-        {
-            "id": 1, "title_en": "MPSC Civil Services Combined Prelims 2026", "title_mr": "एमपीएससी नागरी सेवा संयुक्त पूर्व परीक्षा २०२६",
-            "dept": "MPSC", "start": "2026-03-01", "last": "2026-04-30", "exam": "2026-05-31",
-            "link": "https://mpsc.gov.in", "status": "Closed",
-            "desc_en": "Covers state-level Group A and B gazetted administrative posts.", "desc_mr": "राज्यस्तरीय गट अ आणि ब राजपत्रित प्रशासकीय पदांसाठी परीक्षा."
-        },
-        {
-            "id": 2, "title_en": "IBPS PO (Probationary Officers) CRP XVI", "title_mr": "आयबीपीएस पीओ बँक भरती परीक्षा २०२६",
-            "dept": "IBPS", "start": "2026-07-15", "last": "2026-08-10", "exam": "2026-08-22",
-            "link": "https://ibps.in", "status": "Upcoming",
-            "desc_en": "National bank recruitment drive for Probationary Officers.", "desc_mr": "राष्ट्रीयीकृत बँकांमध्ये प्रोबेशनरी ऑफिसर पदांसाठी भरती."
-        },
-        {
-            "id": 3, "title_en": "RRB NTPC Undergraduate CBT-1 Exam", "title_mr": "रेल्वे एनटीपीसी अंडरग्रेजुएट परीक्षा २०२६",
-            "dept": "Railways (RRB)", "start": "2026-05-10", "last": "2026-06-02", "exam": "2026-06-13",
-            "link": "https://rrbcdg.gov.in", "status": "Active",
-            "desc_en": "Revised Computer Based Testing timelines for Undergraduate positions.", "desc_mr": "अंडरग्रेजुएट रेल्वे पदांसाठी सुधारित संगणक आधारित परीक्षा वेळापत्रक."
-        },
-        {
-            "id": 4, "title_en": "Maharashtra Police Constable Recruitment", "title_mr": "महाराष्ट्र पोलीस शिपाई भरती प्रक्रिया",
-            "dept": "Maharashtra Police", "start": "2026-01-05", "last": "2026-02-15", "exam": "2026-05-05",
-            "link": "https://mahapolice.gov.in", "status": "Closed",
-            "desc_en": "State-wide mega recruitment drive for Police Constables and SRPF forces.", "desc_mr": "पोलीस शिपाई आणि एसआरपीएफ दलांसाठी राज्यव्यापी मेगा भरती प्रक्रिया."
-        }
+        {"id": 1, "title_en": "MPSC Civil Services Prelims 2026", "title_mr": "एमपीएससी नागरी सेवा पूर्व परीक्षा २०२६", "dept": "MPSC", "start": "2026-03-01", "last": "2026-04-30", "exam": "2026-05-31", "link": "https://mpsc.gov.in", "status": "Closed", "desc_en": "Covers Group A and B gazetted administrative posts.", "desc_mr": "गट अ आणि ब राजपत्रित प्रशासकीय पदांसाठी परीक्षा."},
+        {"id": 2, "title_en": "IBPS PO Bank Recruitment XVI", "title_mr": "आयबीपीएस पीओ बँक भरती परीक्षा २०२६", "dept": "IBPS", "start": "2026-07-15", "last": "2026-08-10", "exam": "2026-08-22", "link": "https://ibps.in", "status": "Upcoming", "desc_en": "National recruitment drive for Probationary Officers.", "desc_mr": "राष्ट्रीयीकृत बँकांमध्ये पीओ पदांसाठी भरती."},
+        {"id": 3, "title_en": "RRB NTPC Undergraduate Exam", "title_mr": "रेल्वे एनटीपीसी अंडरग्रेजुएट परीक्षा २०२६", "dept": "Railways (RRB)", "start": "2026-05-10", "last": "2026-06-02", "exam": "2026-06-13", "link": "https://rrbcdg.gov.in", "status": "Active", "desc_en": "Computer Based Testing timelines for railway positions.", "desc_mr": "रेल्वे पदांसाठी संगणक आधारित परीक्षा वेळापत्रक."},
+        {"id": 4, "title_en": "Maharashtra Police Constable Bharti", "title_mr": "महाराष्ट्र पोलीस शिपाई भरती प्रक्रिया", "dept": "Maha Police", "start": "2026-01-05", "last": "2026-02-15", "exam": "2026-05-05", "link": "https://mahapolice.gov.in", "status": "Closed", "desc_en": "Mega recruitment drive for Police Constables.", "desc_mr": "पोलीस शिपाई पदांसाठी मेगा भरती प्रक्रिया."}
     ]
 
-# Create Navigation Tabs (Student View vs Protected Admin Control Room)
+# 3. Layout Function for the Bottom Disclaimer Notice Box
+def show_legal_banner():
+    st.markdown("""
+        <div class="disclaimer-box">
+            <h6 style="margin:0; color:#F57F17; font-weight:700;">⚠️ IMPORTANT NOTICE / महत्वाची सूचना</h6>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#333;"><b>ENG:</b> This is an unofficial platform. Verify all real-time schedule changes directly on the official portal.</p>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#333;"><b>MAR:</b> हे एक अनधिकृत प्लॅटफॉर्म आहे. वेळापत्रकातील रिअल-टाइम बदलांसाठी कृपया अधिकृत पोर्टलवरून खात्री करून घ्यावी.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+# 4. Initialize Navigation Layout Tabs
 tab_student, tab_admin = st.tabs(["📝 Exam Schedules / वेळापत्रक", "🔒 Admin Dashboard / नियंत्रण कक्ष"])
 
 # =========================================================
-#                    STUDENT VIEW TAB
+#                    STUDENT DISPLAY MODULE
 # =========================================================
 with tab_student:
-    lang = st.radio("Select Interface Language / भाषा निवडा", ["English", "मराठी"], horizontal=True, key="student_lang")
+    lang = st.radio("Select Language / भाषा", ["English", "मराठी"], horizontal=True, key="user_lang")
+    st.markdown(f'<div class="main-title">{"MAHA EXAM GATEWAY" if lang=="English" else "महाराष्ट्र परीक्षा पोर्टल"}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="sub-title">{"Live Timelines for Recruitments" if lang=="English" else "स्पर्धा परीक्षांचे अधिकृत वेळापत्रक"}</div>', unsafe_allow_html=True)
     
-    if lang == "English":
-        st.markdown('<div class="main-title">MAHA EXAM GATEWAY</div>', unsafe_allow_html=True)
-        st.markdown('<div class="sub-title">Live Timelines for Competitive Recruitments</div>', unsafe_allow_html=True)
-        search_placeholder = "Search by exam name or department..."
-    else:
-        st.markdown('<div class="main-title">महाराष्ट्र परीक्षा पोर्टल</div>', unsafe_allow_html=True)
-        st.markdown('<div class="sub-title">स्पर्धा परीक्षांचे अधिकृत वेळापत्रक</div>', unsafe_allow_html=True)
-        search_placeholder = "परीक्षा किंवा विभागाचे नाव शोधा..."
-
-    search_query = st.text_input("", placeholder=search_placeholder, key="search_bar")
-
-    # Dynamic Exam Card Builder
-    for exam in st.session_state['exams']:
-        title = exam["title_en"] if lang == "English" else exam["title_mr"]
-        desc = exam["desc_en"] if lang == "English" else exam["desc_mr"]
-        
-        if search_query.lower() in title.lower() or search_query.lower() in exam["dept"].lower():
-            if exam["status"] in ["Open", "Active"]:
-                badge_color = "#4CAF50"
-            elif exam["status"] == "Upcoming":
-                badge_color = "#FF9800"
-            else:
-                badge_color = "#757575"
-                
-            card_html = f"""
-            <div class="exam-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-                    <b style="font-size:16px; color:#111; font-weight:700;">{title}</b>
-                    <span class="status-badge" style="background-color:{badge_color}; white-space: nowrap;">{exam['status']}</span>
+    search = st.text_input("", placeholder="Search exam or department..." if lang=="English" else "परीक्षा किंवा विभाग शोधा...", key="find")
+    
+    for item in st.session_state['exams']:
+        title = item["title_en"] if lang == "English" else item["title_mr"]
+        desc = item["desc_en"] if lang == "English" else item["desc_mr"]
+        if search.lower() in title.lower() or search.lower() in item["dept"].lower():
+            color = "#4CAF50" if item["status"] in ["Open", "Active"] else "#FF9800" if item["status"] == "Upcoming" else "#757575"
+            st.markdown(f"""
+                <div class="exam-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <b style="font-size:15px; color:#111; flex:1;">{title}</b>
+                        <span class="status-badge" style="background-color:{color};">{item['status']}</span>
+                    </div>
+                    <p style="color:#666; font-size:11px; margin:4px 0;"><b>Dept:</b> {item['dept']}</p>
+                    <p style="font-size:12px; color:#333; margin-bottom:8px;">{desc}</p>
+                    <hr style="margin:6px 0; border:none; border-top:1px solid #EEE;"/>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; font-size:11px; text-align:center;">
+                        <div><b>Form Start</b><br/>{item['start']}</div>
+                        <div><b style="color:#D32F2F;">Last Date</b><br/>{item['last']}</div>
+                        <div><b style="color:#002F6C;">Exam Date</b><br/>{item['exam']}</div>
+                    </div>
                 </div>
-                <p style="color:#666; font-size:12px; margin: 5px 0 10px 0;"><b>Department / विभाग:</b> {exam['dept']}</p>
-                <p style="font-size:13px; color:#333; margin:0 0 10px 0;">{desc}</p>
-                <hr style="margin:10px 0; border:none; border-top:1px solid #EEE;"/>
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; font-size:12px; text-align:center;">
-                    <div><b style="color:#555;">Form Start</b><br/>{exam['start']}</div>
-                    <div><b style="color:#D32F2F;">Last Date</b><br/>{exam['last']}</div>
-                    <div><b style="color:#002F6C; font-weight:700;">Exam Date</b><br/>{exam['exam']}</div>
-                </div>
-            </div>
-            """
-            st.markdown(card_html, unsafe_allow_html=True)
-            btn_label = "Go to Official Application Portal ↗" if lang == "English" else "अधिकृत अर्ज पोर्टलवर जा ↗"
-            st.link_button(btn_label, exam["link"], use_container_width=True)
-            st.markdown("<div style='margin-bottom:20px;'></div>", unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
+            st.link_button("Go to Official Application Portal ↗" if lang=="English" else "अधिकृत अर्ज पोर्टलवर जा ↗", item["link"], use_container_width=True)
+    show_legal_banner()
 
 # =========================================================
-#                    ADMIN CONTROL TAB
+#                    ADMIN MANAGEMENT MODULE
 # =========================================================
 with tab_admin:
-    st.subheader("Manage Database Manually")
-    
-    # Simple Gatekeeper Passcode Check
-    admin_password = st.text_input("Enter Admin Security Pin", type="password", key="admin_pin")
-    
-    if admin_password == "admin123":
-        st.success("Access Granted! You can modify or add data entries below.")
-        
-        # --- ACTION SECTION 1: ADD NEW EXAM ---
+    st.subheader("Database Control Panel")
+    pin = st.text_input("Enter Admin Security Pin", type="password", key="gate")
+    if pin == "admin123":
+        st.success("Authorized Access.")
         with st.expander("➕ Add New Competitive Exam Entry"):
-            new_en = st.text_input("Exam Name (English)")
-            new_mr = st.text_input("Exam Name (Marathi / मराठी)")
-            new_dept = st.selectbox("Department / Body", ["MPSC", "IBPS", "Railways (RRB)", "Maharashtra Police", "Other"])
-            col_d1, col_d2, col_d3 = st.columns(3)
-            new_start = col_d1.text_input("Form Start Date", value="2026-01-01")
-            new_last = col_d2.text_input("Last Date to Apply", value="2026-01-31")
-            new_exam = col_d3.text_input("Written Exam Date", value="2026-06-01")
-            new_link = st.text_input("Official Portal Link URL", value="https://")
-            new_status = st.selectbox("Current Status", ["Upcoming", "Active", "Open", "Closed"])
-            new_desc_en = st.text_area("Details Brief (English)")
-            new_desc_mr = st.text_area("Details Brief (Marathi / मराठी)")
-            
-            if st.button("Save New Entry to Database"):
-                if new_en and new_mr:
-                    new_id = len(st.session_state['exams']) + 1
-                    st.session_state['exams'].append({
-                        "id": new_id, "title_en": new_en, "title_mr": new_mr,
-                        "dept": new_dept, "start": new_start, "last": new_last, "exam": new_exam,
-                        "link": new_link, "status": new_status, "desc_en": new_desc_en, "desc_mr": new_desc_mr
-                    })
-                    st.success("Successfully added! Switch to the Student View tab to verify.")
+            add_en = st.text_input("Exam Name (English)")
+            add_mr = st.text_input("Exam Name (मराठी)")
+            add_dept = st.selectbox("Body", ["MPSC", "IBPS", "Railways (RRB)", "Maha Police", "Other"])
+            c1, c2, c3 = st.columns(3)
+            v_start = c1.text_input("Form Start Date", value="2026-01-01")
+            v_last = c2.text_input("Last Date", value="2026-01-31")
+            v_exam = c3.text_input("Exam Date", value="2026-06-01")
+            add_link = st.text_input("Portal Link URL", value="https://")
+            add_state = st.selectbox("Status", ["Upcoming", "Active", "Open", "Closed"])
+            info_en = st.text_area("Details (EN)")
+            info_mr = st.text_area("Details (MR)")
+            if st.button("Save Entry"):
+                if add_en and add_mr:
+                    st.session_state['exams'].append({"id": len(st.session_state['exams'])+1, "title_en": add_en, "title_mr": add_mr, "dept": add_dept, "start": v_start, "last": v_last, "exam": v_exam, "link": add_link, "status": add_state, "desc_en": info_en, "desc_mr": info_mr})
                     st.rerun()
-                else:
-                    st.error("Please complete the Exam Name fields before saving.")
 
-        # --- ACTION SECTION 2: EDIT EXISTING EXAMS ---
         if st.session_state['exams']:
             st.markdown("---")
-            st.subheader("📝 Edit or Delete Active Records")
-            
+            lookup = {f"{x['id']}: {x['title_en']}": i for i, x in enumerate(st.session_state['exams'])}
+            pick = st.selectbox("Select Record to Update", list(lookup.keys()))
+            idx = lookup[pick]
+            st.session_state['exams'][idx]["title_en"] = st.text_input("Edit Name (EN)", value=st.session_state['exams'][idx]["title_en"])
+            st.session_state['exams'][idx]["title_mr"] = st.text_input("Edit Name (MR)", value=st.session_state['exams'][idx]["title_mr"])
+            bx1, bx2, bx3 = st.columns(3)
+            st.session_state['exams'][idx]["start"] = bx1.text_input("Edit Start", value=st.session_state['exams'][idx]["start"])
+            st.session_state['exams'][idx]["last"] = bx2.text_input("Edit Deadline", value=st.session_state['exams'][idx]["last"])
+            st.session_state['exams'][idx]["exam"] = bx3.text_input("Edit Test", value=st.session_state['exams'][idx]["exam"])
+            st.session_state['exams'][idx]["status"] = st.selectbox("Status Badge", ["Upcoming", "Active", "Open", "Closed"], index=["Upcoming", "Active", "Open", "Closed"].index(st.session_state['exams'][idx]["status"]))
+            st.session_state['exams'][idx]["link"] = st.text_input("Update Target URL", value=st.session_state['exams'][idx]["link"])
+            if st.button("Remove Record", type="primary"):
+                st.session_state['exams'].pop(idx)
+                st.rerun()
+    elif pin != "":
+        st.error("Invalid Pin.")
+    show_legal_banner()
