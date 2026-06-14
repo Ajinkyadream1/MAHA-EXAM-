@@ -6,7 +6,7 @@ st.set_page_config(page_title="Maha Exam Tracker", page_icon="🏛️", layout="
 
 # --- PLACE YOUR PUBLIC GOOGLE SHEET LINK HERE ---
 # Paste your copied Google Sheet sharing URL inside the quotes below:
-GOOGLE_SHEET_URL = "https://google.com"
+GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1w_AXMeBluB5sM_soDDlH1Q3HmQ2HqixV1sx0kmzLEbI/edit?pli=1&gid=0#gid=0"
 
 @st.cache_data(ttl=60)  # Automate live tracking: Refreshes data cache automatically every 60 seconds
 def load_live_data(sheets_url):
