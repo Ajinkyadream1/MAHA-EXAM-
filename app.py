@@ -3,14 +3,68 @@ import streamlit as st
 # 1. Page Configuration Setup (Government Blue & Gold Theme Layout)
 st.set_page_config(page_title="Maha Exam Tracker", page_icon="🏛️", layout="centered")
 
+# Importing Elegant Google Web Fonts (Cinzel for Headers, Montserrat for Cards)
 st.markdown("""
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Cinzel:wght@600;800&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
-    .stApp { background-color: #F8F9FA; }
-    .main-title { color: #002F6C; font-weight: bold; text-align: center; font-size: 24px; margin-bottom: 5px; }
-    .sub-title { color: #D32F2F; text-align: center; font-size: 14px; font-weight: bold; margin-bottom: 20px; }
-    .disclaimer-box { background-color: #FFF9C4; padding: 15px; border-left: 5px solid #FBC02D; border-radius: 5px; margin-bottom: 20px; }
-    .exam-card { background-color: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 15px; border-top: 4px solid #002F6C; }
-    .status-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: white; }
+    /* App-wide Typography Framework overrides */
+    .stApp { 
+        background-color: #F8F9FA;
+        font-family: 'Montserrat', sans-serif !important;
+    }
+    
+    /* Elegant Government Style Header Typography */
+    .main-title { 
+        font-family: 'Cinzel', serif !important;
+        color: #002F6C; 
+        font-weight: 800; 
+        text-align: center; 
+        font-size: 28px; 
+        letter-spacing: 1px;
+        margin-bottom: 5px; 
+    }
+    .sub-title { 
+        font-family: 'Montserrat', sans-serif !important;
+        color: #D32F2F; 
+        text-align: center; 
+        font-size: 13px; 
+        font-weight: 700; 
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 25px; 
+    }
+    
+    /* Relocated Bottom Disclaimer Layout styling */
+    .disclaimer-box { 
+        background-color: #FFF9C4; 
+        padding: 15px; 
+        border-left: 5px solid #FBC02D; 
+        border-radius: 5px; 
+        margin-top: 40px; 
+        margin-bottom: 20px; 
+    }
+    
+    /* Clean Cards Visual Engine Layout */
+    .exam-card { 
+        background-color: white; 
+        padding: 18px; 
+        border-radius: 8px; 
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        margin-bottom: 12px; 
+        border-top: 4px solid #002F6C; 
+    }
+    .status-badge { 
+        display: inline-block; 
+        padding: 4px 10px; 
+        border-radius: 4px; 
+        font-size: 11px; 
+        font-weight: 700; 
+        color: white; 
+        text-transform: uppercase;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -36,21 +90,12 @@ if 'exams' not in st.session_state:
             "desc_en": "Revised Computer Based Testing timelines for Undergraduate positions.", "desc_mr": "अंडरग्रेजुएट रेल्वे पदांसाठी सुधारित संगणक आधारित परीक्षा वेळापत्रक."
         },
         {
-            "id": 4, "title_en": "Maharashtra Police Constable Recruitment", "title_mr": "महारष्ट्र पोलीस शिपाई भरती प्रक्रिया",
+            "id": 4, "title_en": "Maharashtra Police Constable Recruitment", "title_mr": "महाराष्ट्र पोलीस शिपाई भरती प्रक्रिया",
             "dept": "Maharashtra Police", "start": "2026-01-05", "last": "2026-02-15", "exam": "2026-05-05",
             "link": "https://mahapolice.gov.in", "status": "Closed",
             "desc_en": "State-wide mega recruitment drive for Police Constables and SRPF forces.", "desc_mr": "पोलीस शिपाई आणि एसआरपीएफ दलांसाठी राज्यव्यापी मेगा भरती प्रक्रिया."
         }
     ]
-
-# 3. Public View Top Notification Banner
-st.markdown("""
-    <div class="disclaimer-box">
-        <h4 style="margin:0; color:#F57F17;">⚠️ IMPORTANT NOTICE / महत्वाची सूचना</h4>
-        <p style="margin:5px 0 0 0; font-size:13px; color:#333;"><b>ENG:</b> This is an unofficial platform. Verify all real-time schedule changes directly on the official portal.</p>
-        <p style="margin:5px 0 0 0; font-size:13px; color:#333;"><b>MAR:</b> हे एक अनधिकृत प्लॅटफॉर्म आहे. वेळापत्रकातील रिअल-टाइम बदलांसाठी कृपया अधिकृत पोर्टलवरून खात्री करून घ्यावी.</p>
-    </div>
-""", unsafe_allow_html=True)
 
 # Create Navigation Tabs (Student View vs Protected Admin Control Room)
 tab_student, tab_admin = st.tabs(["📝 Exam Schedules / वेळापत्रक", "🔒 Admin Dashboard / नियंत्रण कक्ष"])
@@ -62,7 +107,7 @@ with tab_student:
     lang = st.radio("Select Interface Language / भाषा निवडा", ["English", "मराठी"], horizontal=True, key="student_lang")
     
     if lang == "English":
-        st.markdown('<div class="main-title">Maharashtra Exam Gateway</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-title">MAHA EXAM GATEWAY</div>', unsafe_allow_html=True)
         st.markdown('<div class="sub-title">Live Timelines for Competitive Recruitments</div>', unsafe_allow_html=True)
         search_placeholder = "Search by exam name or department..."
     else:
@@ -88,7 +133,7 @@ with tab_student:
             card_html = f"""
             <div class="exam-card">
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-                    <b style="font-size:16px; color:#111;">{title}</b>
+                    <b style="font-size:16px; color:#111; font-weight:700;">{title}</b>
                     <span class="status-badge" style="background-color:{badge_color}; white-space: nowrap;">{exam['status']}</span>
                 </div>
                 <p style="color:#666; font-size:12px; margin: 5px 0 10px 0;"><b>Department / विभाग:</b> {exam['dept']}</p>
@@ -97,7 +142,7 @@ with tab_student:
                 <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; font-size:12px; text-align:center;">
                     <div><b style="color:#555;">Form Start</b><br/>{exam['start']}</div>
                     <div><b style="color:#D32F2F;">Last Date</b><br/>{exam['last']}</div>
-                    <div><b style="color:#002F6C;">Exam Date</b><br/>{exam['exam']}</div>
+                    <div><b style="color:#002F6C; font-weight:700;">Exam Date</b><br/>{exam['exam']}</div>
                 </div>
             </div>
             """
@@ -107,7 +152,7 @@ with tab_student:
             st.markdown("<div style='margin-bottom:20px;'></div>", unsafe_allow_html=True)
 
 # =========================================================
-#                    ADMIN CONTROL TAB (FIXED MIGRATION)
+#                    ADMIN CONTROL TAB
 # =========================================================
 with tab_admin:
     st.subheader("Manage Database Manually")
@@ -150,9 +195,3 @@ with tab_admin:
             st.markdown("---")
             st.subheader("📝 Edit or Delete Active Records")
             
-            exam_options = {f"{e['id']}: {e['title_en']}": idx for idx, e in enumerate(st.session_state['exams'])}
-            selected_exam_str = st.selectbox("Select Record to Update", list(exam_options.keys()))
-            target_idx = exam_options[selected_exam_str]
-            
-            # Form fields securely nested inside the password loop context block
-            st.session_state['exams'][target_idx]["title_en"] = st.text_input("Edit Name (EN)", value=st.session_state['exams'][target_idx]["title_en"])
