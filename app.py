@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 
 # Set mobile-responsive page config with government aesthetic colors
 st.set_page_config(page_title="Maha Exam Tracker", page_icon="🏛️", layout="centered")
@@ -14,7 +13,7 @@ st.markdown("""
     .exam-card { background-color: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 15px; border-top: 4px solid #002F6C; }
     .status-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: white; }
     </style>
-""", unsafe_data_allowed=True)
+""", unsafe_allow_html=True)
 
 # 1. Legal Bilingual Disclaimer Banner
 st.markdown("""
@@ -23,18 +22,18 @@ st.markdown("""
         <p style="margin:5px 0 0 0; font-size:13px; color:#333;"><b>ENG:</b> This is an unofficial platform. Verify all real-time schedule changes directly on the official portal.</p>
         <p style="margin:5px 0 0 0; font-size:13px; color:#333;"><b>MAR:</b> हे एक अनधिकृत प्लॅटफॉर्म आहे. वेळापत्रकातील रिअल-टाइम बदलांसाठी कृपया अधिकृत पोर्टलवरून खात्री करून घ्यावी.</p>
     </div>
-""", unsafe_data_allowed=True)
+""", unsafe_allow_html=True)
 
 # 2. Language Selection Toggle
 lang = st.radio("Select Language / भाषा निवडा", ["English", "मराठी"], horizontal=True)
 
 if lang == "English":
-    st.markdown('<div class="main-title">Maharashtra Competitive Exams Tracker</div>', unsafe_data_allowed=True)
-    st.markdown('<div class="sub-title">Official Timelines & Application Gateways</div>', unsafe_data_allowed=True)
+    st.markdown('<div class="main-title">Maharashtra Competitive Exams Tracker</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Official Timelines & Application Gateways</div>', unsafe_allow_html=True)
     search_placeholder = "Search exams by name or department..."
 else:
-    st.markdown('<div class="main-title">महाराष्ट्र स्पर्धा परीक्षा ट्रॅकर</div>', unsafe_data_allowed=True)
-    st.markdown('<div class="sub-title">अधिकृत वेळापत्रक आणि अर्ज लिंक्स</div>', unsafe_data_allowed=True)
+    st.markdown('<div class="main-title">महाराष्ट्र स्पर्धा परीक्षा ट्रॅकर</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">अधिकृत वेळापत्रक आणि अर्ज लिंक्स</div>', unsafe_allow_html=True)
     search_placeholder = "परीक्षा किंवा विभागाद्वारे शोधा..."
 
 # 3. Real Maharashtra Exam Data
@@ -100,7 +99,7 @@ for exam in exams_data:
             </div>
         </div>
         """
-        st.markdown(card_html, unsafe_data_allowed=True)
+        st.markdown(card_html, unsafe_allow_html=True)
         
         # Authentic Portal Link Button
         btn_label = "Go to Official Application Portal ↗" if lang == "English" else "अधिकृत अर्ज पोर्टलवर जा ↗"
